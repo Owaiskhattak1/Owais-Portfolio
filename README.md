@@ -1,8 +1,6 @@
 # Owais Khattak - Dynamic Personal Portfolio
 
-<div align="center">
-  <img src="assets/profile.jpg" alt="Profile Picture" width="150" height="150" style="border-radius: 50%;">
-  
+
   <h3 align="center">Modern & Interactive Portfolio</h3>
 
   <p align="center">
