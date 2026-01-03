@@ -1,320 +1,940 @@
-document.addEventListener('DOMContentLoaded', () => {
+/* ========================================
+   MODERN PORTFOLIO WEBSITE - SCRIPT.JS
+   Advanced Interactive JavaScript Functionality
+   ======================================== */
 
-    // ==========================================
-    // 1. THEME SWITCHER LOGIC
-    // ==========================================
+// ========== ACADEMIC BACKGROUND DATA ==========
+/**
+ * Academic history data structure
+ * Each object represents one education level with complete details
+ * To update: Modify this array with your own academic records
+ */
+const academicData = [
+    {
+        level: "Primary",
+        institution: "Bright Future Primary School",
+        years: "2005-2010",
+        city: "Abbottabad",
+        remarks: "Foundation education completed"
+    },
+    {
+        level: "Secondary",
+        institution: "Government High School",
+        years: "2010-2015",
+        city: "Abbottabad",
+        remarks: "Matriculation with Science"
+    },
+    {
+        level: "Intermediate",
+        institution: "Superior College",
+        years: "2015-2017",
+        city: "Abbottabad",
+        remarks: "Pre-Engineering (FSc)"
+    },
+    {
+        level: "Undergraduate",
+        institution: "UET Abbottabad",
+        years: "2021-Present",
+        city: "Abbottabad",
+        remarks: "BS Computer Science - In Progress"
+    }
+];
+
+// ========== PROGRESS TRACKER DATA ==========
+/**
+ * Progress tracker tasks/milestones
+ * To update: Add or modify tasks in this array
+ */
+let progressData = [
+    { id: 1, category: "Frontend Development", skill: "HTML5 & Semantic Structure", progress: 90, color: "#2563eb" },
+    { id: 2, category: "Frontend Development", skill: "CSS3 & Animations", progress: 85, color: "#2563eb" },
+    { id: 3, category: "Frontend Development", skill: "JavaScript & DOM Manipulation", progress: 80, color: "#2563eb" },
+    { id: 4, category: "Frontend Development", skill: "Responsive Web Design", progress: 90, color: "#2563eb" },
+    { id: 5, category: "Frontend Development", skill: "React.js Fundamentals", progress: 60, color: "#2563eb" },
+    { id: 6, category: "Tools & Workflow", skill: "Git & Version Control", progress: 75, color: "#10b981" },
+    { id: 7, category: "Tools & Workflow", skill: "VS Code & Development Tools", progress: 85, color: "#10b981" },
+    { id: 8, category: "Backend Development", skill: "Node.js & Express", progress: 50, color: "#f59e0b" },
+    { id: 9, category: "Backend Development", skill: "Database Fundamentals", progress: 45, color: "#f59e0b" },
+    { id: 10, category: "Design & UI/UX", skill: "Graphics Design", progress: 80, color: "#8b5cf6" },
+    { id: 11, category: "Design & UI/UX", skill: "UI/UX Principles", progress: 70, color: "#8b5cf6" }
+];
+
+// ========== PROJECT DATA FOR LIGHTBOX ==========
+const projectImages = [
+    {
+        src: "assets/projects/project1.jpg",
+        title: "Web Dashboard",
+        description: "Modern analytics dashboard with data visualization",
+        category: "web"
+    },
+    {
+        src: "assets/projects/project2.jpg",
+        title: "E-Commerce App",
+        description: "Mobile shopping application with modern UI",
+        category: "mobile"
+    },
+    {
+        src: "assets/projects/project3.jpg",
+        title: "Portfolio Website",
+        description: "Elegant portfolio with glassmorphism effects",
+        category: "design"
+    }
+];
+
+// ========== TYPING ANIMATION DATA ==========
+const typingTexts = [
+    "A CS Undergraduate at UET Abbottabad",
+    "A Graphics Designer",
+    "A Front-end Web Developer",
+    "An Entry Level Programmer"
+];
+let typingIndex = 0;
+let charIndex = 0;
+let isDeleting = false;
+
+// ========== INITIALIZATION ==========
+/**
+ * Initialize all features when DOM is loaded
+ */
+document.addEventListener('DOMContentLoaded', function () {
+    // Show loading screen
+    showLoadingScreen();
+
+    // Load saved theme
+    loadTheme();
+
+    // Render academic table
+    renderAcademicTable(academicData);
+
+    // Render progress tracker
+    renderProgressTracker();
+
+    // Initialize all event listeners
+    initializeEventListeners();
+
+    // Initialize professional features
+    initScrollProgress();
+    initScrollReveal();
+    initTypingAnimation();
+    initStatsCounter();
+
+    // Hide loading screen after everything is loaded
+    window.addEventListener('load', hideLoadingScreen);
+});
+
+// ========== LOADING SCREEN ==========
+/**
+ * Show loading screen with progress animation
+ */
+function showLoadingScreen() {
+    const loadingProgress = document.getElementById('loading-progress');
+    let progress = 0;
+
+    const interval = setInterval(() => {
+        progress += Math.random() * 30;
+        if (progress > 100) progress = 100;
+
+        if (loadingProgress) {
+            loadingProgress.style.width = progress + '%';
+        }
+
+        if (progress >= 100) {
+            clearInterval(interval);
+        }
+    }, 200);
+}
+
+/**
+ * Hide loading screen
+ */
+function hideLoadingScreen() {
+    const loadingScreen = document.getElementById('loading-screen');
+    if (loadingScreen) {
+        setTimeout(() => {
+            loadingScreen.classList.add('hidden');
+        }, 500);
+    }
+}
+
+// ========== SCROLL PROGRESS INDICATOR ==========
+/**
+ * Update scroll progress bar
+ */
+function initScrollProgress() {
+    const scrollProgress = document.getElementById('scroll-progress');
+    if (!scrollProgress) return;
+
+    window.addEventListener('scroll', () => {
+        const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (window.scrollY / windowHeight);
+        scrollProgress.style.transform = `scaleX(${scrolled})`;
+    });
+}
+
+// ========== SCROLL REVEAL ANIMATIONS ==========
+/**
+ * Reveal elements on scroll using Intersection Observer
+ */
+function initScrollReveal() {
+    const revealElements = document.querySelectorAll('[data-scroll-reveal]');
+
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => {
+                    entry.target.classList.add('revealed');
+                }, index * 100);
+                revealObserver.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    });
+
+    revealElements.forEach(el => {
+        revealObserver.observe(el);
+    });
+}
+
+// ========== TYPING ANIMATION ==========
+/**
+ * Animated typing effect for bio text
+ */
+function initTypingAnimation() {
+    const typedTextElement = document.querySelector('.typed-text');
+    if (!typedTextElement) return;
+
+    function type() {
+        const currentText = typingTexts[typingIndex];
+
+        if (isDeleting) {
+            typedTextElement.textContent = currentText.substring(0, charIndex - 1);
+            charIndex--;
+        } else {
+            typedTextElement.textContent = currentText.substring(0, charIndex + 1);
+            charIndex++;
+        }
+
+        let typeSpeed = isDeleting ? 50 : 100;
+
+        if (!isDeleting && charIndex === currentText.length) {
+            typeSpeed = 2000;
+            isDeleting = true;
+        } else if (isDeleting && charIndex === 0) {
+            isDeleting = false;
+            typingIndex = (typingIndex + 1) % typingTexts.length;
+            typeSpeed = 500;
+        }
+
+        setTimeout(type, typeSpeed);
+    }
+
+    type();
+}
+
+// ========== STATS COUNTER ANIMATION ==========
+/**
+ * Animate stats numbers counting up
+ */
+function initStatsCounter() {
+    const statNumbers = document.querySelectorAll('.stat__number');
+
+    const statsObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const target = parseFloat(entry.target.getAttribute('data-target'));
+                animateCounter(entry.target, target);
+                statsObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+
+    statNumbers.forEach(stat => {
+        statsObserver.observe(stat);
+    });
+}
+
+/**
+ * Animate counter from 0 to target
+ */
+function animateCounter(element, target) {
+    let current = 0;
+    const increment = target / 50;
+    const isDecimal = target % 1 !== 0;
+
+    const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+            current = target;
+            clearInterval(timer);
+        }
+
+        element.textContent = isDecimal ? current.toFixed(1) : Math.floor(current);
+    }, 30);
+}
+
+// ========== EVENT LISTENERS INITIALIZATION ==========
+/**
+ * Set up all event listeners for interactive elements
+ */
+function initializeEventListeners() {
+    // Navigation
+    const navToggle = document.getElementById('nav-toggle');
+    const navClose = document.getElementById('nav__close'); // Fixed ID mismatch
+    const navMenu = document.getElementById('nav-menu');
+    const navLinks = document.querySelectorAll('.nav__link');
+
+    if (navToggle) {
+        navToggle.addEventListener('click', toggleMobileMenu);
+    }
+
+    if (navClose) {
+        navClose.addEventListener('click', toggleMobileMenu);
+    }
+
+    // Close menu when clicking nav links
+    navLinks.forEach(link => {
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            smoothScroll(targetId);
+            if (navMenu && navMenu.classList.contains('show-menu')) { // Updated class name
+                toggleMobileMenu();
+            }
+
+            // Update active link
+            navLinks.forEach(l => l.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+
+    // Theme toggle
     const themeToggle = document.getElementById('theme-toggle');
-    const htmlElement = document.documentElement;
-    const icon = themeToggle.querySelector('i');
-
-    /**
-     * Sets the theme of the website and updates localStorage
-     * @param {string} theme - 'light' or 'dark'
-     */
-    function setTheme(theme) {
-        htmlElement.setAttribute('data-theme', theme);
-        localStorage.setItem('theme', theme);
-
-        // Toggle icon class based on theme
-        if (theme === 'dark') {
-            icon.classList.remove('fa-moon');
-            icon.classList.add('fa-sun');
-        } else {
-            icon.classList.remove('fa-sun');
-            icon.classList.add('fa-moon');
-        }
+    if (themeToggle) {
+        themeToggle.addEventListener('click', toggleTheme);
     }
 
-    // Check for saved user preference on load
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    setTheme(savedTheme);
-
-    // Event Listener for the toggle button
-    themeToggle.addEventListener('click', () => {
-        const currentTheme = htmlElement.getAttribute('data-theme');
-        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-        setTheme(newTheme);
-    });
-
-    // ==========================================
-    // 2. MOBILE NAVIGATION (HAMBURGER MENU)
-    // ==========================================
-    const hamburger = document.getElementById('hamburger');
-    const navLinks = document.getElementById('navLinks');
-    const links = navLinks.querySelectorAll('a');
-
-    // Toggle menu visibility on hamburger click
-    hamburger.addEventListener('click', () => {
-        navLinks.classList.toggle('nav-active');
-        hamburger.classList.toggle('toggle');
-    });
-
-    // Close mobile menu when a navigation link is clicked
-    links.forEach(link => {
-        link.addEventListener('click', () => {
-            navLinks.classList.remove('nav-active');
-            hamburger.classList.remove('toggle');
-        });
-    });
-
-    // ==========================================
-    // 3. ACADEMIC TABLE (SORT & FILTER)
-    // ==========================================
-    // Data source for the table
-    const academicData = [
-        { year: 2024, level: 'University', degree: 'BS Computer Science', institute: 'UET Abbottabad', grade: '3.5 CGPA' },
-        { year: 2021, level: 'Secondary', degree: 'HSSC (Pre-Engineering)', institute: 'Peace College', grade: 'A+' },
-        { year: 2019, level: 'Secondary', degree: 'SSC (Science)', institute: 'Public School', grade: 'A' },
-        { year: 2017, level: 'Primary', degree: 'Primary Education', institute: 'Model School', grade: 'Pass' }
-    ];
-
-    const tableBody = document.getElementById('table-body');
-    const filterSelect = document.getElementById('filter-level');
-    const sortBtn = document.getElementById('sort-year');
-
-    // State variables
-    let currentData = [...academicData];
-    let sortAsc = false;
-
-    /**
-     * Renders the academic table rows based on provided data
-     * @param {Array} data - Array of academic objects
-     */
-    function renderTable(data) {
-        tableBody.innerHTML = ''; // Clear existing rows
-
-        data.forEach(item => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${item.year}</td>
-                <td><span class="badge">${item.level}</span></td>
-                <td>${item.degree}</td>
-                <td>${item.institute}</td>
-                <td>${item.grade}</td>
-            `;
-            tableBody.appendChild(row);
-        });
-    }
-
-    // Initial Table Render
-    renderTable(currentData);
-
-    // Filter Event Listener
-    filterSelect.addEventListener('change', (e) => {
-        const level = e.target.value;
-        if (level === 'all') {
-            currentData = [...academicData];
-        } else {
-            currentData = academicData.filter(item => item.level === level);
-        }
-        renderTable(currentData);
-    });
-
-    // Sort Event Listener
-    sortBtn.addEventListener('click', () => {
-        sortAsc = !sortAsc; // Toggle sort direction
-
-        currentData.sort((a, b) => {
-            return sortAsc ? a.year - b.year : b.year - a.year;
-        });
-
-        // Update Button Icon to show direction
-        sortBtn.innerHTML = `Sort by Year <i class="fas fa-sort-${sortAsc ? 'up' : 'down'}"></i>`;
-        renderTable(currentData);
-    });
-
-    // ==========================================
-    // 4. CV VIEWER MODAL
-    // ==========================================
-    const cvModal = document.getElementById('cv-modal');
+    // CV Viewer
     const viewCvBtn = document.getElementById('view-cv-btn');
-    const closeCvBtn = document.getElementById('close-cv');
+    const cvCloseBtn = document.getElementById('cv-close-btn');
+    const cvViewer = document.getElementById('cv-viewer');
 
-    // Open Modal
-    viewCvBtn.addEventListener('click', () => {
-        cvModal.style.display = 'flex';
-        // Small timeout to allow CSS transition to trigger
-        setTimeout(() => cvModal.classList.add('open'), 10);
-    });
-
-    // Close Modal Function
-    function closeModal() {
-        cvModal.classList.remove('open');
-        setTimeout(() => cvModal.style.display = 'none', 300);
+    if (viewCvBtn) {
+        viewCvBtn.addEventListener('click', openCVViewer);
     }
 
-    closeCvBtn.addEventListener('click', closeModal);
+    if (cvCloseBtn) {
+        cvCloseBtn.addEventListener('click', closeCVViewer);
+    }
 
-    // Close when clicking outside content area
-    cvModal.addEventListener('click', (e) => {
-        if (e.target === cvModal) {
-            closeModal();
+    // Close CV viewer when clicking overlay
+    if (cvViewer) {
+        const overlay = cvViewer.querySelector('.cv-viewer__overlay');
+        if (overlay) {
+            overlay.addEventListener('click', closeCVViewer);
         }
-    });
-
-    // ==========================================
-    // 5. PROJECT CAROUSEL SLIDER
-    // ==========================================
-    const track = document.getElementById('carousel-track');
-    const slides = Array.from(track.children);
-    const nextButton = document.getElementById('next-btn');
-    const prevButton = document.getElementById('prev-btn');
-    const dotsNav = document.getElementById('carousel-nav');
-    const dots = Array.from(dotsNav.children);
-
-    let currentSlideIndex = 0;
-
-    /**
-     * Moves the carousel to the specified slide index
-     * @param {number} index - Index of the target slide
-     */
-    function moveSlide(index) {
-        // Translate the track to show the correct slide
-        track.style.transform = 'translateX(-' + (index * 100) + '%)';
-
-        // Update active dot indicator
-        dots.forEach(d => d.classList.remove('current-slide'));
-        dots[index].classList.add('current-slide');
-
-        currentSlideIndex = index;
     }
 
-    // Next Button Click
-    nextButton.addEventListener('click', () => {
-        const nextIndex = (currentSlideIndex + 1) % slides.length; // Loop back to start
-        moveSlide(nextIndex);
-    });
+    // Academic table controls
+    const levelFilter = document.getElementById('level-filter');
+    const sortBy = document.getElementById('sort-by');
 
-    // Prev Button Click
-    prevButton.addEventListener('click', () => {
-        const prevIndex = (currentSlideIndex - 1 + slides.length) % slides.length; // Loop to end
-        moveSlide(prevIndex);
-    });
+    if (levelFilter) {
+        levelFilter.addEventListener('change', handleFilter);
+    }
 
-    // Dot Navigation Click
-    dots.forEach((dot, index) => {
-        dot.addEventListener('click', () => {
-            moveSlide(index);
+    if (sortBy) {
+        sortBy.addEventListener('change', handleSort);
+    }
+
+    // Contact form
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+        contactForm.addEventListener('submit', handleFormSubmit);
+    }
+
+    // Project filter buttons
+    const filterBtns = document.querySelectorAll('.filter__btn');
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', function () {
+            filterBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+
+            const filter = this.getAttribute('data-filter');
+            filterProjects(filter);
         });
     });
 
-    // ==========================================
-    // 6. CONTACT FORM VALIDATION
-    // ==========================================
-    const contactForm = document.getElementById('contact-form');
+    // Project cards for lightbox
+    const projectCards = document.querySelectorAll('.project__card');
+    projectCards.forEach(card => {
+        card.addEventListener('click', function () {
+            const index = parseInt(this.getAttribute('data-index'));
+            openLightbox(index);
+        });
+    });
 
-    contactForm.addEventListener('submit', (e) => {
-        e.preventDefault(); // Prevent actual form submission
-        let isValid = true;
+    // Lightbox controls
+    const lightboxClose = document.getElementById('lightbox-close');
+    const lightboxPrev = document.getElementById('lightbox-prev');
+    const lightboxNext = document.getElementById('lightbox-next');
+    const lightbox = document.getElementById('lightbox');
 
-        // Get Form Elements
-        const name = document.getElementById('name');
-        const email = document.getElementById('email');
-        const message = document.getElementById('message');
+    if (lightboxClose) {
+        lightboxClose.addEventListener('click', closeLightbox);
+    }
 
-        // Reset previous error states
-        [name, email, message].forEach(el => el.parentElement.classList.remove('error'));
+    if (lightboxPrev) {
+        lightboxPrev.addEventListener('click', () => navigateLightbox(-1));
+    }
 
-        // Name Validation
-        if (name.value.trim() === '') {
-            showError(name, 'Name is required');
-            isValid = false;
-        }
+    if (lightboxNext) {
+        lightboxNext.addEventListener('click', () => navigateLightbox(1));
+    }
 
-        // Email Validation
-        if (email.value.trim() === '') {
-            showError(email, 'Email is required');
-            isValid = false;
-        } else if (!isValidEmail(email.value)) {
-            showError(email, 'Please enter a valid email');
-            isValid = false;
-        }
+    // Close lightbox on background click
+    if (lightbox) {
+        lightbox.addEventListener('click', function (e) {
+            if (e.target === lightbox) {
+                closeLightbox();
+            }
+        });
+    }
 
-        // Message Validation
-        if (message.value.trim() === '') {
-            showError(message, 'Message is required');
-            isValid = false;
-        }
-
-        // Success State
-        if (isValid) {
-            // Construct mailto link
-            const subject = `Portfolio Contact from ${name.value}`;
-            const body = `Name: ${name.value}%0D%0AEmail: ${email.value}%0D%0A%0D%0AMessage:%0D%0A${message.value}`;
-            const mailtoLink = `mailto:0awaiskhattak1@gmail.com?subject=${encodeURIComponent(subject)}&body=${body}`;
-
-            // Open email client
-            window.location.href = mailtoLink;
-
-            // Feedback and reset
-            alert('Opening your email client to send the message...');
-            contactForm.reset();
+    // Keyboard navigation for lightbox
+    document.addEventListener('keydown', function (e) {
+        if (lightbox && lightbox.classList.contains('active')) {
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowLeft') navigateLightbox(-1);
+            if (e.key === 'ArrowRight') navigateLightbox(1);
         }
     });
 
-    /**
-     * Helper function to show error message under input
-     */
-    function showError(input, msg) {
-        const formGroup = input.parentElement;
-        const errorSpan = formGroup.querySelector('.error-msg');
-        errorSpan.innerText = msg;
-        formGroup.classList.add('error');
+    // Header scroll effect
+    const header = document.getElementById('header');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
+
+    // Dynamic navbar active state on scroll
+    initNavbarActiveState();
+}
+
+// ========== NAVIGATION FUNCTIONS ==========
+/**
+ * Toggle mobile hamburger menu
+ */
+function toggleMobileMenu() {
+    const navMenu = document.getElementById('nav-menu');
+    if (navMenu) {
+        navMenu.classList.toggle('show-menu');
+    }
+}
+
+/**
+ * Smooth scroll to target section
+ * @param {string} target - CSS selector of target element
+ */
+function smoothScroll(target) {
+    const element = document.querySelector(target);
+    if (element) {
+        const headerHeight = document.querySelector('.header').offsetHeight;
+        const elementPosition = element.offsetTop - headerHeight;
+
+        window.scrollTo({
+            top: elementPosition,
+            behavior: 'smooth'
+        });
+    }
+}
+
+// ========== THEME SWITCHER FUNCTIONS ==========
+/**
+ * Toggle between light and dark themes
+ */
+function toggleTheme() {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+    document.documentElement.setAttribute('data-theme', newTheme);
+
+    // Update theme icon
+    const themeIcon = document.querySelector('.theme-icon');
+    if (themeIcon) {
+        themeIcon.textContent = newTheme === 'dark' ? '☀️' : '🌙';
     }
 
-    /**
-     * Regex helper for email format validation
-     */
-    function isValidEmail(email) {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    // Save to localStorage
+    saveTheme(newTheme);
+}
+
+/**
+ * Save theme preference to localStorage
+ * @param {string} theme - Theme name ('light' or 'dark')
+ */
+function saveTheme(theme) {
+    localStorage.setItem('portfolio-theme', theme);
+}
+
+/**
+ * Load saved theme from localStorage
+ */
+function loadTheme() {
+    const savedTheme = localStorage.getItem('portfolio-theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+
+    // Update theme icon
+    const themeIcon = document.querySelector('.theme-icon');
+    if (themeIcon) {
+        themeIcon.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+    }
+}
+
+// ========== ACADEMIC TABLE FUNCTIONS ==========
+/**
+ * Render academic table with data
+ * @param {Array} data - Array of academic records
+ */
+function renderAcademicTable(data) {
+    const tbody = document.getElementById('academic-tbody');
+    if (!tbody) return;
+
+    tbody.innerHTML = '';
+
+    data.forEach(record => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${record.level}</td>
+            <td>${record.institution}</td>
+            <td>${record.years}</td>
+            <td>${record.city}</td>
+            <td>${record.remarks}</td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+/**
+ * Handle filter change event
+ */
+function handleFilter() {
+    const filterValue = document.getElementById('level-filter').value;
+    let filteredData = academicData;
+
+    if (filterValue !== 'all') {
+        filteredData = academicData.filter(record => record.level === filterValue);
     }
 
-    // ==========================================
-    // 7. PROGRESS TRACKER ANIMATION
-    // ==========================================
-    const progressSection = document.querySelector('.skills-tracker');
-    const progressBars = document.querySelectorAll('.progress-bar');
+    renderAcademicTable(filteredData);
+}
 
-    // Use IntersectionObserver to start animation when section is in view
+/**
+ * Handle sort change event
+ */
+function handleSort() {
+    const sortValue = document.getElementById('sort-by').value;
+    const filterValue = document.getElementById('level-filter').value;
+
+    // Get current filtered data
+    let dataToSort = academicData;
+    if (filterValue !== 'all') {
+        dataToSort = academicData.filter(record => record.level === filterValue);
+    }
+
+    // Create a copy to sort
+    let sortedData = [...dataToSort];
+
+    // Sort based on selection
+    switch (sortValue) {
+        case 'year-asc':
+            sortedData.sort((a, b) => {
+                const yearA = parseInt(a.years.split('-')[0]);
+                const yearB = parseInt(b.years.split('-')[0]);
+                return yearA - yearB;
+            });
+            break;
+        case 'year-desc':
+            sortedData.sort((a, b) => {
+                const yearA = parseInt(a.years.split('-')[0]);
+                const yearB = parseInt(b.years.split('-')[0]);
+                return yearB - yearA;
+            });
+            break;
+        case 'institution-asc':
+            sortedData.sort((a, b) => a.institution.localeCompare(b.institution));
+            break;
+        case 'institution-desc':
+            sortedData.sort((a, b) => b.institution.localeCompare(a.institution));
+            break;
+    }
+
+    renderAcademicTable(sortedData);
+}
+
+// ========== CV VIEWER FUNCTIONS ==========
+/**
+ * Open CV viewer modal
+ */
+function openCVViewer() {
+    const cvViewer = document.getElementById('cv-viewer');
+    if (cvViewer) {
+        cvViewer.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+/**
+ * Close CV viewer modal
+ */
+function closeCVViewer() {
+    const cvViewer = document.getElementById('cv-viewer');
+    if (cvViewer) {
+        cvViewer.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}
+
+// ========== PROJECT FILTER FUNCTIONS ==========
+/**
+ * Filter projects by category
+ * @param {string} category - Category to filter by
+ */
+function filterProjects(category) {
+    const projectCards = document.querySelectorAll('.project__card');
+
+    projectCards.forEach(card => {
+        const cardCategory = card.getAttribute('data-category');
+
+        if (category === 'all' || cardCategory === category) {
+            card.style.display = 'block';
+            setTimeout(() => {
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 10);
+        } else {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            setTimeout(() => {
+                card.style.display = 'none';
+            }, 300);
+        }
+    });
+}
+
+// ========== LIGHTBOX FUNCTIONS ==========
+let currentLightboxIndex = 0;
+
+/**
+ * Open lightbox with specific image
+ * @param {number} index - Index of image to display
+ */
+function openLightbox(index) {
+    currentLightboxIndex = index;
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+
+    if (lightbox && lightboxImg && lightboxCaption) {
+        const project = projectImages[index];
+        lightboxImg.src = project.src;
+        lightboxImg.alt = project.title;
+        lightboxCaption.textContent = `${project.title} - ${project.description}`;
+
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+/**
+ * Close lightbox
+ */
+function closeLightbox() {
+    const lightbox = document.getElementById('lightbox');
+    if (lightbox) {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}
+
+/**
+ * Navigate to next/previous image in lightbox
+ * @param {number} direction - Direction to navigate (-1 for previous, 1 for next)
+ */
+function navigateLightbox(direction) {
+    currentLightboxIndex += direction;
+
+    // Wrap around
+    if (currentLightboxIndex < 0) {
+        currentLightboxIndex = projectImages.length - 1;
+    } else if (currentLightboxIndex >= projectImages.length) {
+        currentLightboxIndex = 0;
+    }
+
+    const lightboxImg = document.getElementById('lightbox-img');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    const project = projectImages[currentLightboxIndex];
+
+    if (lightboxImg && lightboxCaption) {
+        lightboxImg.style.opacity = '0';
+
+        setTimeout(() => {
+            lightboxImg.src = project.src;
+            lightboxImg.alt = project.title;
+            lightboxCaption.textContent = `${project.title} - ${project.description}`;
+            lightboxImg.style.opacity = '1';
+        }, 200);
+    }
+}
+
+// ========== PROGRESS TRACKER FUNCTIONS ==========
+/**
+ * Render skill progress bars grouped by category
+ */
+function renderProgressTracker() {
+    const tasksContainer = document.getElementById('progress-tasks');
+    if (!tasksContainer) return;
+
+    tasksContainer.innerHTML = '';
+
+    // Group skills by category
+    const categories = {};
+    progressData.forEach(skill => {
+        if (!categories[skill.category]) {
+            categories[skill.category] = [];
+        }
+        categories[skill.category].push(skill);
+    });
+
+    // Render each category
+    Object.keys(categories).forEach(categoryName => {
+        const categorySection = document.createElement('div');
+        categorySection.className = 'progress-category';
+
+        const categoryTitle = document.createElement('h3');
+        categoryTitle.className = 'progress-category__title';
+        categoryTitle.textContent = categoryName;
+        categorySection.appendChild(categoryTitle);
+
+        const skillsContainer = document.createElement('div');
+        skillsContainer.className = 'progress-skills';
+
+        // Render each skill in the category
+        categories[categoryName].forEach(skill => {
+            const skillItem = document.createElement('div');
+            skillItem.className = 'skill-item';
+            skillItem.setAttribute('data-skill-id', skill.id);
+
+            skillItem.innerHTML = `
+                <div class="skill-header">
+                    <span class="skill-name">${skill.skill}</span>
+                    <span class="skill-percentage">${skill.progress}%</span>
+                </div>
+                <div class="skill-bar">
+                    <div class="skill-bar-fill" data-progress="${skill.progress}" style="background: ${skill.color}"></div>
+                </div>
+            `;
+
+            skillsContainer.appendChild(skillItem);
+        });
+
+        categorySection.appendChild(skillsContainer);
+        tasksContainer.appendChild(categorySection);
+    });
+
+    // Animate progress bars when they come into view
+    animateSkillBars();
+}
+
+/**
+ * Animate skill progress bars using Intersection Observer
+ */
+function animateSkillBars() {
+    const skillBars = document.querySelectorAll('.skill-bar-fill');
+
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                progressBars.forEach(bar => {
-                    const width = bar.getAttribute('data-width');
-                    bar.style.width = width; // Triggers CSS transition
-                });
-                observer.unobserve(entry.target); // Stop observing once animated
+                const bar = entry.target;
+                const progress = bar.getAttribute('data-progress');
+
+                // Trigger animation
+                setTimeout(() => {
+                    bar.style.width = `${progress}%`;
+                }, 100);
+
+                observer.unobserve(bar);
             }
         });
-    }, { threshold: 0.5 }); // Trigger when 50% visible
-
-    if (progressSection) {
-        observer.observe(progressSection);
-    }
-
-    // ==========================================
-    // 8. SCROLL SPY (Active Nav Link)
-    // ==========================================
-    const sections = document.querySelectorAll('section');
-    const navItems = document.querySelectorAll('.nav-links a');
-
-    const scrollObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const currentId = entry.target.getAttribute('id');
-
-                navItems.forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href').includes(currentId)) {
-                        link.classList.add('active');
-                    }
-                });
-            }
-        });
-    }, { threshold: 0.3 }); // Trigger when 30% of section is visible
-
-    sections.forEach(section => {
-        scrollObserver.observe(section);
+    }, {
+        threshold: 0.5
     });
 
-});
+    skillBars.forEach(bar => observer.observe(bar));
+}
+
+// ========== CONTACT FORM FUNCTIONS ==========
+/**
+ * Handle form submission
+ * @param {Event} e - Submit event
+ */
+function handleFormSubmit(e) {
+    e.preventDefault();
+
+    // Get form fields
+    const nameInput = document.getElementById('contact-name');
+    const emailInput = document.getElementById('contact-email');
+    const messageInput = document.getElementById('contact-message');
+
+    // Clear previous errors
+    clearFormErrors();
+
+    // Validate fields
+    let isValid = true;
+
+    if (!validateName(nameInput.value)) {
+        showError('name', 'Please enter your name');
+        isValid = false;
+    }
+
+    if (!validateEmail(emailInput.value)) {
+        showError('email', 'Please enter a valid email address');
+        isValid = false;
+    }
+
+    if (!validateMessage(messageInput.value)) {
+        showError('message', 'Please enter a message');
+        isValid = false;
+    }
+
+    // If valid, show success message
+    if (isValid) {
+        showSuccess();
+        // Reset form
+        setTimeout(() => {
+            nameInput.value = '';
+            emailInput.value = '';
+            messageInput.value = '';
+            hideSuccess();
+        }, 3000);
+    }
+}
+
+/**
+ * Validate name field
+ * @param {string} name - Name to validate
+ * @returns {boolean} - True if valid
+ */
+function validateName(name) {
+    return name.trim().length > 0;
+}
+
+/**
+ * Validate email format
+ * @param {string} email - Email to validate
+ * @returns {boolean} - True if valid
+ */
+function validateEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email.trim());
+}
+
+/**
+ * Validate message field
+ * @param {string} message - Message to validate
+ * @returns {boolean} - True if valid
+ */
+function validateMessage(message) {
+    return message.trim().length > 0;
+}
+
+/**
+ * Show error message for a field
+ * @param {string} fieldName - Name of field (name, email, message)
+ * @param {string} message - Error message to display
+ */
+function showError(fieldName, message) {
+    const errorElement = document.getElementById(`${fieldName}-error`);
+    const inputElement = document.getElementById(`contact-${fieldName}`);
+
+    if (errorElement) {
+        errorElement.textContent = message;
+    }
+
+    if (inputElement) {
+        inputElement.classList.add('error');
+    }
+}
+
+/**
+ * Clear all form errors
+ */
+function clearFormErrors() {
+    const errorElements = document.querySelectorAll('.form__error');
+    const inputElements = document.querySelectorAll('.form__input, .form__textarea');
+
+    errorElements.forEach(el => el.textContent = '');
+    inputElements.forEach(el => el.classList.remove('error'));
+}
+
+/**
+ * Show success message
+ */
+function showSuccess() {
+    const successElement = document.getElementById('form-success');
+    if (successElement) {
+        successElement.classList.add('show');
+    }
+}
+
+/**
+ * Hide success message
+ */
+function hideSuccess() {
+    const successElement = document.getElementById('form-success');
+    if (successElement) {
+        successElement.classList.remove('show');
+    }
+}
+
+/**
+ * Initialize dynamic navbar active state based on scroll position
+ */
+function initNavbarActiveState() {
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav__link');
+
+    const observerOptions = {
+        root: null,
+        rootMargin: '-20% 0px -70% 0px',
+        threshold: 0
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const sectionId = entry.target.getAttribute('id');
+
+                // Remove active class from all links
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                });
+
+                // Add active class to corresponding link
+                const activeLink = document.querySelector(`.nav__link[href="#${sectionId}"]`);
+                if (activeLink) {
+                    activeLink.classList.add('active');
+                }
+            }
+        });
+    }, observerOptions);
+
+    // Observe all sections
+    sections.forEach(section => {
+        observer.observe(section);
+    });
+}

@@ -1,164 +1,259 @@
-# Owais Khattak - Dynamic Personal Portfolio
+# Personal Portfolio Website
 
+A fully functional, professional, dynamic, and responsive personal portfolio website built with vanilla HTML5, CSS3, and JavaScript.
 
-  <h3 align="center">Modern & Interactive Portfolio</h3>
+## 🌟 Features
 
-  <p align="center">
-    A fully functional, responsive, and interactive personal portfolio website built with modern web technologies.
-    <br />
-    <a href="#-features">View Features</a>
-    ·
-    <a href="#-getting-started">Getting Started</a>
-    ·
-    <a href="#-customization">Customization Guide</a>
-  </p>
-</div>
+This portfolio website includes all the following mandatory features:
 
----
+### ✅ A. Personal Profile Section
+- Professional profile card with image
+- Name, registration number, and bio
+- Advanced CSS styling with gradients and shadows
+- Smooth animations (fade-in, hover effects)
+- Fully responsive layout (mobile/desktop)
+- Accessibility features (semantic HTML, alt attributes)
 
-## 📖 About The Project
+### ✅ B. Academic Background Section
+- Dynamic JavaScript-driven table
+- **Sorting functionality**: Sort by Year or Institution (ascending/descending)
+- **Filtering functionality**: Filter by education level (Primary, Secondary, Intermediate, Undergraduate)
+- Data stored in JavaScript array for easy updates
+- Responsive table design
 
-This project is a sophisticated personal portfolio website designed to showcase professional achievements, education, and skills in a modern, engaging way. It moves beyond static HTML templates by incorporating dynamic features like theme switching (with persistence), interactive data tables, and a seamless project gallery.
+### ✅ C. Interactive CV Viewer
+- "View My CV" button
+- Modal overlay with embedded PDF using iframe
+- Responsive CV container
+- Comprehensive PDF.js implementation documentation in code comments
 
-It is built with a focus on:
-*   **User Experience:** Smooth animations, intuitive navigation, and responsive layout.
-*   **Maintainability:** Clean code structure allowing for easy updates to content.
-*   **Aesthetics:** A polished, professional look with attention to detail in typography and color.
+### ✅ D. Theme Switcher (Light/Dark Mode)
+- Toggle button for theme switching
+- localStorage persistence (saves user preference)
+- Auto-loads saved theme on page refresh
+- Accessible with ARIA labels
+- Smooth color transitions
 
-### 🛠️ Built With
+### ✅ E. Contact Form with Validation
+- Name, Email, and Message fields
+- **JavaScript validation**:
+  - Empty field detection
+  - Email format validation
+  - Inline error messages
+- Success message on valid submission
+- Modern, responsive design
 
-*   ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
-*   ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
-*   ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+### ✅ F. Responsive Navigation
+- Fully responsive for mobile, tablet, and desktop
+- Hamburger menu for mobile devices
+- Smooth scrolling to sections
+- Glassmorphism effects
 
----
+### ✅ G. Projects/Gallery Section
+- Project cards with images
+- **Lightbox effect**: Click to view full-size images
+- Close button and next/previous navigation
+- Keyboard navigation support (Escape, Arrow keys)
+- Smooth animations and transitions
 
-## 🚀 Features
+### ✅ H. Interactive Progress Tracker
+- Display tasks/milestones
+- Click to mark tasks as complete/incomplete
+- **Dynamic percentage calculation**
+- **Animated progress bar**
+- localStorage persistence (saves progress)
+- Auto-restores progress on page reload
 
-### Core Functionality
--   **Dynamic Theme Switcher**: 🌓 Toggle seamlessly between Light and Dark modes. Your preference is saved locally, so the site remembers your choice on your next visit.
--   **Responsive Design**: 📱 Fully optimized for all devices - looks great on desktops, tablets, and mobile phones.
--   **Smooth Navigation**: 🔗 Sticky navigation bar with smooth scrolling to sections.
+## 🚀 How to Run
 
-### Interactive Elements
--   **Academic Table**: 🎓 A sortable and filarble table to display education history. You can sort by year or filter by education level (University, College, School).
--   **CV Viewer**: 📄 Integrated PDF viewer modal. Visitors can view your CV directly on the site or download it.
--   **Project Gallery**: 🖼️ A touch-friendly carousel slider to browse through your portfolio projects.
--   **Contact Form**: 📧 Includes client-side validation to ensure correctly formatted names, emails, and messages before submission.
+### Method 1: Direct Opening (Simple)
+1. Navigate to the project folder
+2. Double-click `index.html` to open in your browser
 
----
+**Note**: PDF viewing may not work in some browsers due to security restrictions when opening files directly.
 
-## 📂 Project Structure
+### Method 2: Local Server (Recommended)
+For full functionality including PDF viewing, run a local server:
 
-A clean organization makes the project easy to navigate and maintain:
+#### Using Python:
+```bash
+# Navigate to project directory
+cd "d:\Owais Portfolio New"
 
+# Python 3
+python -m http.server 8000
+
+# Python 2
+python -m SimpleHTTPServer 8000
 ```
-Owais Portfolio/
-├── assets/
-│   ├── profile.jpg       # Profile Picture
-│   └── cv.pdf            # Your CV/Resume file
-├── index.html            # Main HTML structure
-├── style.css             # Styling, themes, and animations
-├── script.js             # Logic, interactivity, and data
-└── README.md             # Documentation
+
+Then open `http://localhost:8000` in your browser.
+
+#### Using Node.js (if installed):
+```bash
+npx http-server -p 8000
 ```
 
----
+#### Using VS Code:
+Install the "Live Server" extension and right-click `index.html` → "Open with Live Server"
 
-## 🏁 Getting Started
+## 📝 How to Customize
 
-To get a local copy up and running, follow these simple steps.
+### Replace Personal Data
 
-### Prerequisites
+#### 1. Update Profile Information
+Open `index.html` and find the profile section (around line 55):
+```html
+<h1 class="profile__name">Owais Khattak</h1>
+<p class="profile__registration">Registration: <span>UOS2165111</span></p>
+<p class="profile__bio">
+    A CS Undergraduate at UET Abbottabad, a Graphics Designer, 
+    a front-end web-developer, entry level programmer.
+</p>
+```
+Replace with your own name, registration number, and bio.
 
-*   A modern web browser (Chrome, Firefox, Safari, Edge).
-*   A text editor (VS Code recommended) if you plan to edit the code.
+#### 2. Replace Profile Picture
+- Add your image to the `assets/` folder (e.g., `my-photo.jpg`)
+- Update line 58 in `index.html`:
+```html
+<img src="assets/my-photo.jpg" alt="Your Name - Your Title" class="profile__img">
+```
 
-### Installation
+#### 3. Update Academic Records
+Open `script.js` and find the `academicData` array (around line 11):
+```javascript
+const academicData = [
+    {
+        level: "Primary",
+        institution: "Your School Name",
+        years: "2005-2010",
+        city: "Your City",
+        remarks: "Your remarks"
+    },
+    // Add more records...
+];
+```
+Modify, add, or remove records as needed.
 
-1.  **Clone the repo** (or download the ZIP file):
-    ```sh
-    git clone https://github.com/Owaiskhattak1/Owais-Portfolio.git
-    ```
-2.  **Open the folder**:
-    Navigate to the project directory.
-3.  **Run the project**:
-    Simply double-click `index.html` to open it in your browser.
-    *   *Tip:* For the best development experience, use the "Live Server" extension in VS Code.
+#### 4. Replace CV PDF
+- Add your CV PDF to the `assets/` folder (e.g., `my-cv.pdf`)
+- Update line 146 in `index.html`:
+```html
+<iframe src="assets/my-cv.pdf" class="cv-viewer__iframe" id="cv-iframe"></iframe>
+```
 
----
+#### 5. Update Projects
+**Images**: Replace images in `assets/projects/` folder
 
-## 🎨 Customizing Styles
+**Project Data**: Open `script.js` and find the `projectImages` array (around line 36):
+```javascript
+const projectImages = [
+    {
+        src: "assets/projects/your-project.jpg",
+        title: "Your Project Title",
+        description: "Your project description"
+    },
+    // Add more projects...
+];
+```
 
-The project uses CSS variables for easy theming. Open `style.css` and modify the root variables:
+**HTML**: Update project cards in `index.html` (around line 169)
 
+#### 6. Update Progress Tracker Tasks
+Open `script.js` and find the `progressData` array (around line 24):
+```javascript
+let progressData = [
+    { id: 1, text: "Your task description", completed: false },
+    // Add more tasks...
+];
+```
+
+### Customize Colors and Theme
+
+Open `style.css` and modify the CSS variables at the top (around line 9):
 ```css
-/* Light Mode Colors */
 :root {
-    --primary-color: #2563eb;
-    --bg-color: #ffffff;
-    /* ... other variables */
-}
-
-/* Dark Mode Colors */
-[data-theme="dark"] {
-    --primary-color: #60a5fa;
-    --bg-color: #0f172a;
-    /* ... other variables */
+    --primary-color: #6366f1;  /* Change primary color */
+    --secondary-color: #ec4899; /* Change secondary color */
+    /* Modify other colors as needed */
 }
 ```
 
+## 📁 Project Structure
+
+```
+d:/Owais Portfolio New/
+├── index.html          # Main HTML file
+├── style.css           # All styles and themes
+├── script.js           # All JavaScript functionality
+├── README.md           # This file
+├── USER_MANUAL.md      # User manual
+└── assets/
+    ├── profile.jpg     # Profile picture
+    ├── cv.pdf          # CV document
+    └── projects/       # Project images
+        ├── project1.jpg
+        ├── project2.jpg
+        └── project3.jpg
+```
+
+## 🎨 Technologies Used
+
+- **HTML5**: Semantic structure
+- **CSS3**: Flexbox, Grid, animations, custom properties
+- **JavaScript**: Vanilla JS (DOM manipulation, events, localStorage)
+- **Google Fonts**: Inter (body), Outfit (headings)
+
+## ✨ Design Features
+
+- Modern gradient color schemes
+- Glassmorphism effects
+- Smooth micro-animations
+- Responsive design (mobile-first approach)
+- Dark/Light theme support
+- Accessibility features (ARIA labels, semantic HTML)
+
+## 🌐 Browser Compatibility
+
+Tested and working on:
+- Chrome (latest)
+- Firefox (latest)
+- Edge (latest)
+- Safari (latest)
+
+## 📱 Responsive Breakpoints
+
+- **Mobile**: 320px - 425px
+- **Tablet**: 426px - 768px
+- **Desktop**: 769px and above
+
+## 🔧 Troubleshooting
+
+### PDF Not Loading
+- Use a local server (see "How to Run" section)
+- Check that `cv.pdf` exists in the `assets/` folder
+- Try a different browser
+
+### Theme Not Persisting
+- Check browser localStorage is enabled
+- Clear browser cache and try again
+
+### Images Not Showing
+- Verify image paths are correct
+- Check that images exist in the `assets/` folder
+- Use browser DevTools to check for 404 errors
+
+## 📄 License
+
+This is a personal portfolio template. Feel free to use and modify for your own portfolio.
+
+## 👤 Author
+
+**Owais Khattak**  
+Registration: UOS2165111  
+CS Undergraduate at UET Abbottabad
+
 ---
 
-## 📝 How to Update Content
-
-You don't need to be a coding expert to update your portfolio. Here is how to personalize it:
-
-### 1. Update Profile Picture
-*   Replace `assets/profile.jpg` with your own photo.
-*   Keep the filename `profile.jpg` to avoid changing the code, or update the `src` attribute in `index.html`.
-
-### 2. Update CV
-*   Save your resume as a PDF.
-*   Name it `cv.pdf` and replace the file in the `assets/` folder.
-
-### 3. Update Academic Data (Education)
-*   Open `script.js`.
-*   Find the `academicData` array. It looks like this:
-    ```javascript
-    const academicData = [
-       { year: 2024, level: 'University', degree: 'BS CS', institute: 'Institute Name', grade: '3.5' },
-       // ... add your data here
-    ];
-    ```
-*   Simply edit the text inside the quotes or add new lines for new degrees.
-
-### 4. Update Projects
-*   Open `index.html`.
-*   Search for the section with `id="projects"`.
-*   Copy and paste an existing `<li>` block to add a new project card, then update the title and description.
-
----
-
-## 🤝 Contributing
-
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-1.  Fork the Project
-2.  Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3.  Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4.  Push to the Branch (`git push origin feature/AmazingFeature`)
-5.  Open a Pull Request
-
----
-
-## 📧 Contact
-
-**Owais Khattak**
-
-*   Email: [0awaiskhattak1@gmail.com](mailto:0awaiskhattak1@gmail.com)
-*   GitHub: [Owaiskhattak1](https://github.com/Owaiskhattak1)
-*   LinkedIn: [owais-khattak-34a0062a4](https://www.linkedin.com/in/owais-khattak-34a0062a4/)
-
----
-<p align="center">Made with ❤️ by Owais Khattak</p>
+**Note**: This portfolio demonstrates advanced front-end development skills including JavaScript-driven interactivity, responsive design, accessibility, and modern UI/UX principles.
